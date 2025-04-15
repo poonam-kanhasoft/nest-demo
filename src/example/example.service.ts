@@ -4,12 +4,17 @@ import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExampleDto } from './create-example.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class ExampleService {
   constructor(
     @InjectRepository(Example)
-    private readonly exampleRepository: Repository<Example>) {}
+    private readonly exampleRepository: Repository<Example>,
+    @InjectQueue('example-queue')
+    private readonly exampleQueue: Queue,
+  ) {}
 
     findAll(): Promise<Example[]> {
       const examples = this.exampleRepository.find();     
@@ -43,8 +48,11 @@ export class ExampleService {
       return true;
     }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
-  handleEvery10Seconds() {
-    console.log('Task executed every 10 seconds');
+  @Cron(CronExpression.EVERY_WEEK)
+  async handleWeeklyTask() {
+    await this.exampleQueue.add('weekly-task', {
+      timestamp: new Date().toISOString(),
+      // Add any additional data you want to pass to the processor
+    });
   }
 }

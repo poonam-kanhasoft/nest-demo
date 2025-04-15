@@ -11,6 +11,7 @@ A demonstration project built with NestJS framework showcasing various features 
 - Database migrations support
 - Modular architecture
 - Task scheduling with cron jobs
+- Queue management with Bull
 
 ## Prerequisites
 
@@ -104,3 +105,42 @@ Available cron expressions:
 - EVERY_WEEK
 - EVERY_MONTH
 - And more...
+
+## Queue Configuration (Bull)
+
+The project uses Bull for queue management. Here's how to set it up:
+
+1. Install required packages:
+
+```bash
+npm install @nestjs/bull bull
+```
+
+2. Configure Redis connection in `app.module.ts`:
+
+3. Register queues in feature modules (e.g., `example.module.ts`):
+
+4. Use queues in services:
+
+```typescript
+@InjectQueue('example-queue')
+private readonly exampleQueue: Queue
+
+// Add jobs to queue
+await this.exampleQueue.add('weekly-task', {
+  data: 'your-data'
+});
+```
+
+5. Process jobs in processors:
+
+```typescript
+@Processor('example-queue')
+export class ExampleProcessor {
+  @Process('weekly-task')
+  async handleTask(job: Job) {
+    // Process job data
+    return { status: 'completed' };
+  }
+}
+```

@@ -13,6 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExampleModule } from './example/example.module';
 import { Example } from './example/example.entity';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -27,12 +28,13 @@ import { ScheduleModule } from '@nestjs/schedule';
     }),
     ExampleModule,
     ScheduleModule.forRoot(),
+    BullModule.forRoot({}),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes()
+    consumer.apply(AuthMiddleware).forRoutes();
   }
 }
