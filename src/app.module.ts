@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestMiddleware, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestMiddleware,
+  NestModule,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ExampleController } from './example/example.controller';
@@ -7,6 +12,8 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExampleModule } from './example/example.module';
 import { Example } from './example/example.entity';
+import { ScheduleModule } from '@nestjs/schedule';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -18,7 +25,8 @@ import { Example } from './example/example.entity';
       database: 'nest',
       entities: [Example],
     }),
-    ExampleModule
+    ExampleModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

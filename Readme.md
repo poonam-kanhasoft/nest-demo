@@ -10,6 +10,7 @@ A demonstration project built with NestJS framework showcasing various features 
 - Custom middleware implementation
 - Database migrations support
 - Modular architecture
+- Task scheduling with cron jobs
 
 ## Prerequisites
 
@@ -84,3 +85,22 @@ npm run migration:generate -- -d ./data-source.ts src/migrations/<migration-name
 npm run migration:run
 
 ```
+
+### Task Scheduling
+
+```bash
+# Example cron job that runs every 10 minutes
+@Cron(CronExpression.EVERY_10_MINUTES)
+handleEvery10Minutes() {
+  console.log('Task executed every 10 minutes');
+}
+```
+
+Available cron expressions:
+
+- EVERY_10_MINUTES
+- EVERY_HOUR
+- EVERY_DAY_AT_MIDNIGHT
+- EVERY_WEEK
+- EVERY_MONTH
+- And more...

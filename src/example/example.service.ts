@@ -3,6 +3,7 @@ import { Example } from './example.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExampleDto } from './create-example.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class ExampleService {
@@ -41,20 +42,9 @@ export class ExampleService {
       )
       return true;
     }
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  handleEvery10Seconds() {
+    console.log('Task executed every 10 seconds');
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
